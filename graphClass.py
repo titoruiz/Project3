@@ -82,29 +82,3 @@ class Graph:
 		value = 1
 		#visited["Elon"] = str(value)
 		print(visited)
-	# this function will do a BFS type for unweighted graphs
-	# will have vsited array with length array as well and queuu
-
-
-	#red will be used to change the edge color for 
-
-G = Graph()
-G.addEdge("Tim", "Elon")
-G.addEdge("Russ", "Elon")
-G.addEdge("Russ", "Mike")
-G.addEdge("H", "Mike")
-G.addEdge("Mike", "T")
-G.addEdge("Russ", "Tim")
-
-G.addEdge("T", "E")
-G.addEdge("Russ", "E")
-G.addEdge("Russ", "M")
-G.addEdge("H", "Me")
-G.addEdge("M", "T")
-G.addEdge("R", "Tim")
-
-
-#check D's algo
-G.Dijkstras("Elon", "Mike", "T")
-#G.shortestPath()
-G.draw()

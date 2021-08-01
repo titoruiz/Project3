@@ -1,14 +1,17 @@
+import tkinter
 import requests
 from tkinter import *
 from tkinter import messagebox
 
+
 class Display:
     def __init__(self):
-       self.searchData = []
-       self.titles = []
-       self.searchOptions = []
-       self.dest1Options = []
-       self.dest2Options = []
+        self.root = Tk()
+        self.searchData = []
+        self.titles = []
+        self.search = []
+        self.target1 = []
+        self.target2 = []
 
     # returns the search input
     def getSeachData(self):
@@ -28,46 +31,44 @@ class Display:
                 messagebox.showinfo("showinfo", "Input Error: One or more fields are empty.")
             else:
                 self.searchData = [start, dest1, dest2]
-                root.quit()
-
+                self.root.quit()
+                self.root.withdraw()
 
         #display settings for the window
-        root = Tk();
-        root.geometry("800x400")
-        root['background']='#6699cc'
+        self.root.title("Search Page Titles")
+        self.root.geometry("800x400")
+        self.root['background']='#3d4849'
 
-        ins = Label(root, text="For each field, enter a page title. The pages will be searched for in the API. Then you will be prompted to select the exact pages.")
-        ins['background']='#6699cc'
+        ins = Label(self.root, text="For each field, enter a page title. The pages will be searched for in the API. Then you will be prompted to select the exact pages.", fg='#ffffff')
+        ins['background']='#3d4849'
         ins.pack(pady=20)
 
-        startLabel = Label(root, text="Enter Title For Start Page")
-        startLabel['background']='#6699cc'
+        startLabel = Label(self.root, text="Search Title For Start Page", fg='#ffffff')
+        startLabel['background']='#3d4849'
         startLabel.pack()
     
-        s = Entry(root, width=50)
+        s = Entry(self.root, width=50)
         s.pack()
 
-        dest1Label = Label(root, text="Enter Title For First Destination Page")
-        dest1Label['background']='#6699cc'
+        dest1Label = Label(self.root, text="Search Title For First Target Page", fg='#ffffff')
+        dest1Label['background']='#3d4849'
         dest1Label.pack()
 
-        fd = Entry(root, width=50)
+        fd = Entry(self.root, width=50)
         fd.pack()
 
-        dest2Label = Label(root, text="Enter Title For Second Destination Page")
-        dest2Label['background']='#6699cc'
+        dest2Label = Label(self.root, text="Search Title For Second Target Page", fg='#ffffff')
+        dest2Label['background']='#3d4849'
         dest2Label.pack()
 
-        sd = Entry(root, width=50)
+        sd = Entry(self.root, width=50)
         sd.pack()
 
-        button = Button(root, text="Submit To Search", command=getSearchResults)
-        #button.grid(row=0, column=1,padx=10,pady=10)
-        button['background']='#f08080'
+        button = Button(self.root, text="Submit To Search", command=getSearchResults)
+        button['background']='#6699cc'
         button.pack(pady=15)
 
-
-        root.mainloop()
+        self.root.mainloop()
 
     # breaks down the search query to get 10 options to choose from
     def getResultList(self, result):
@@ -83,26 +84,84 @@ class Display:
             data.insert(x,title)
         return data;
     
-    def chooseOptions(self, data):
-        print(data)
+    # 
+    def getOptions(self, data):
         url = "http://en.wikipedia.org/w/api.php?action=query&list=search&format=json&srsearch=";
         searchUrl = url + data[0]
         dest1Url = url + data[1]
         dest2Url = url + data[2]
 
+        # gets the responses from all the search results
         res = requests.get(searchUrl);
         map = res.json()
-        self.searchOptions = self.getResultList(map);
+        self.search = self.getResultList(map);
 
         res2 = requests.get(dest1Url);
         map2 = res2.json()
-        self.dest1Options = self.getResultList(map2);
+        self.target1 = self.getResultList(map2);
 
         res3 = requests.get(dest2Url);
         map3 = res3.json()
-        self.dest2Options = self.getResultList(map3);
+        self.target2 = self.getResultList(map3);
 
 
-        print(self.searchOptions)
-        print(self.dest1Options)
-        print(self.dest2Options)
+    # function for user to choose options when they have searched for it
+    def chooseStartOptions(self):
+
+        def selected():
+            # inserts the selected choices to the titles array
+            self.titles.insert(0, choice.get())
+            self.titles.insert(1, choice1.get())
+            self.titles.insert(2, choice2.get())
+
+            # quits once titles are in array
+            top.quit()
+
+
+        # initializes options window
+        top = Toplevel();
+        top.title("Select Titles")
+        top.geometry("800x400")
+        top['background']='#3d4849'
+
+        choose = Label(top, text="Select The Title Of The Start Page:", fg='#ffffff')
+        choose['background']='#3d4849'
+        choose.pack()
+
+        lab = Label(top, text="If none are selected then the first options in each list will be chosen.", fg='#ffffff')
+        lab['background']='#3d4849'
+        lab.pack()
+
+        # initializes the choices for OptionMenu's
+        choice = StringVar()
+        choice.set(self.search[0])
+        choice1 = StringVar()
+        choice1.set(self.target1[0])
+        choice2 = StringVar()
+        choice2.set(self.target2[0])
+
+        #options menu for all the searches
+        option = OptionMenu(top,choice, *self.search)
+        option.config(width=40)
+        #option["background"] = '#3d4849'
+        option.pack(pady=20)
+
+
+        option1 = OptionMenu(top,choice1, *self.target1)
+        option1.config(width=40)
+        option1.pack(pady=20)
+
+        option2 = OptionMenu(top,choice2, *self.target2)
+        option2.config(width=40)
+        option2.pack(pady=20,)
+
+        # button will select the choices
+        button = Button(top, text="Select Titles", command=selected)
+        button['background']='#6699cc'
+        button.pack()
+
+        top.mainloop()
+    
+    # returns the titles once they are in the array
+    def getTitles(self):
+        return self.titles
