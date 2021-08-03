@@ -12,7 +12,11 @@ class Map:
     distance_2 = 0
     dest1_found = False
     dest2_found = False
-    #request and parses links on given page
+    def _init_(self, array):
+        origin = array[0]
+        destination_1 = array[1]
+        destination_2 = array[2]
+    #request and parses links on given pages
     def get_all_links(title):
         s = requests.Session()
         #request format
