@@ -138,9 +138,6 @@ class Map:
     #initializes map and prepares output
     def create_map():
         start_time = time.time()
-        origin = array[0]
-        destination_1 = array[1]
-        destination_2 = array[2]
         page_links[origin] = 0
         link_parents[origin] = None
         counter = 1
