@@ -132,7 +132,8 @@ class Map:
         if (not dest2_found) and (not dest1_found):
             print("Unable to find destination articles.")
     #initializes map and prepares output
-    def creat_map():
+    def create_map():
+        start_time = time.time()
         origin = array[0]
         destination_1 = array[1]
         destination_2 = array[2]
@@ -142,6 +143,4 @@ class Map:
         #call function to scrape page for valid urls
         scraper(origin, counter)
         output_format()
-        start_time = time.time()
-        create_map()
         print("--- %s seconds ---" % (time.time() - start_time))
