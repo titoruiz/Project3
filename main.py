@@ -1,7 +1,5 @@
-
 from RequestAPI import Display
-
-
+from graphClass import Graph
 
 # initializes the display window and calls it
 display = Display()
@@ -15,4 +13,15 @@ display.chooseStartOptions()
 
 # gets the titles for API requests
 titlesForRequest = display.getTitles()
-print(titlesForRequest)
+
+G = Graph();
+
+myList = titlesForRequest[0]
+for i in range(2):
+    print("i = ", i)
+    myList = G.populateGraph(myList)
+
+print("Edge between umbrella and rain exists: ", G.detectEdge("Umbrella", "Rain"))
+print("Edge between rain and terrain exists: ", G.detectEdge("Rain", "Terrain"))
+#G.shortestPath()
+G.draw()

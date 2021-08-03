@@ -1,5 +1,6 @@
 import networkx as nx
 import matplotlib.pyplot as plot
+import wikipedia as wiki
 
 class Graph:
 	# a dictionary and graph object
@@ -75,10 +76,28 @@ class Graph:
 		self.path = nx.shortest_path(self.G, source=start, target=target1, weight=None)
 		self.path2 = nx.shortest_path(self.G, source=start, target=target2, weight=None)
 		self.compare()
+	def detectEdge(self, a, b):
+		myEdge = list(filter(lambda x: x == [a,b], self.visual))
+		if len(myEdge) == 0:
+			return False
+		return True
 
-	# add start and target
-	def shortestPath(self):
-		visited = []
-		value = 1
-		#visited["Elon"] = str(value)
-		print(visited)
+	    # Populate the graph class with relevant articles (from source to destination)
+	def populateGraph(self, currentLayer):
+		
+		nextLayer = []
+		for i in currentLayer:
+			try:
+				temp = wiki.WikipediaPage(title=i).links
+				print(len(temp))
+			except Exception:
+				pass
+			for j in temp:
+				try:
+					self.addEdge(str(i), str(j))
+					if j not in nextLayer:
+						nextLayer.append(str(j))
+				except Exception:
+					pass
+		return nextLayer
+
