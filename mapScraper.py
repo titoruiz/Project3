@@ -28,6 +28,7 @@ class Map:
         pages = data["query"]["pages"]
         page_titles = []
         #collect links into page_titles
+        #pages containes one key,val pair
         for key, val in pages.items():
             if "pageid" in val:
                 for link in val["links"]:
