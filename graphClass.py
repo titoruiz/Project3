@@ -76,6 +76,7 @@ class Graph:
 		self.path = nx.shortest_path(self.G, source=start, target=target1, weight=None)
 		self.path2 = nx.shortest_path(self.G, source=start, target=target2, weight=None)
 		self.compare()
+        
 	def detectEdge(self, a, b):
 		myEdge = list(filter(lambda x: x == [a,b], self.visual))
 		if len(myEdge) == 0:
